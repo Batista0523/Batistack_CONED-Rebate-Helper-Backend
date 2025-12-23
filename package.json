@@ -9,7 +9,7 @@
     "seed_local": "psql -U postgres -d batistack_dev -f db/seed.sql",
     "build": "tsc",
     "start": "node --max-old-space-size=8192 dist/server.js",
-    "schema_production": "psql \"$DATABASE_URL\" -f db/schema.sql",
+    "schema_production": "psql -d postgresql://dbatista:VSaUxCugrpMyw7g9odRyDtSC4RDZcOlr@dpg-clofkurj65ls73f8f9g0-a.ohio-postgres.render.com/batistadb -f db/schema.sql",
     "seed_production": "psql \"$DATABASE_URL\" -f db/seed.sql"
   },
   "keywords": [],
