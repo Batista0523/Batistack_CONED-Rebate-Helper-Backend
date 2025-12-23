@@ -7,6 +7,7 @@ import {
   updateApplication,
 } from "../Queries/applicationsSteps";
 
+
 const Applications = express.Router();
 
 Applications.get("/", async (_req: Request, res: Response) => {
