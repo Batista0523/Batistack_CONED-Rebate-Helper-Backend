@@ -1,18 +1,13 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "target": "ES2022",
     "module": "commonjs",
-    "target": "es2020",
-    "lib": ["es2020"],
-    "types": ["node"],
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "strict": true,
+    "rootDir": ".",
+    "outDir": "dist",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "skipLibCheck": true
   },
-  "include": ["*.ts", "controllers/**/*.ts", "queries/**/*.ts", "db/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
