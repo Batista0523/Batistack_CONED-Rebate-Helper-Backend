@@ -4,10 +4,6 @@
     "module": "commonjs",
     "rootDir": ".",
     "outDir": "dist",
-
-    "moduleResolution": "node",
-    "types": ["node", "express"],
-
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true

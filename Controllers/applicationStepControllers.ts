@@ -5,8 +5,9 @@ import {
   deleteApplication,
   createApplication,
   updateApplication,
+  duplicateApplication,
+  deleteManyApplications,
 } from "../Queries/applicationsSteps";
-
 
 const Applications = express.Router();
 
@@ -46,6 +47,29 @@ Applications.get("/:id", async (req: Request, res: Response) => {
       success: false,
       error: "Internal error fetching application",
     });
+  }
+});
+Applications.post("/:id/duplicate", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ success: false, error: "Invalid id" });
+    }
+
+    const duplicated = await duplicateApplication(id);
+
+    if (!duplicated) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Application not found" });
+    }
+
+    res.status(201).json({ success: true, payload: duplicated });
+  } catch (err) {
+    console.error("Duplicate error:", err);
+    res
+      .status(500)
+      .json({ success: false, error: "Error duplicating application" });
   }
 });
 
@@ -123,6 +147,25 @@ Applications.delete("/:id", async (req: Request, res: Response) => {
       success: false,
       error: "Internal error deleting application",
     });
+  }
+});
+Applications.post("/bulk-delete", async (req, res) => {
+  try {
+    const { ids, code } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ success: false, error: "No ids provided" });
+    }
+
+    if (code !== process.env.DELETE_CODE) {
+      return res.status(403).json({ success: false, error: "Invalid code" });
+    }
+
+    const deleted = await deleteManyApplications(ids);
+    res.status(200).json({ success: true, payload: deleted });
+  } catch (err) {
+    console.error("Bulk delete error:", err);
+    res.status(500).json({ success: false, error: "Bulk delete failed" });
   }
 });
 

@@ -224,8 +224,42 @@ const deleteApplication = async (id: number): Promise<Application | null> => {
     );
   }
 };
+const duplicateApplication = async (id: number) => {
+  const app = await db.oneOrNone("SELECT * FROM applications WHERE id = $1", [
+    id,
+  ]);
+
+  if (!app) return null;
+
+  const { id: _, created_at, ...data } = app;
+
+  const columns = Object.keys(data);
+  const values = Object.values(data);
+
+  const placeholders = columns.map((_, i) => `$${i + 1}`).join(",");
+
+  const query = `
+    INSERT INTO applications (${columns.join(",")})
+    VALUES (${placeholders})
+    RETURNING *
+  `;
+
+  return db.one(query, values);
+};
+const deleteManyApplications = async (ids: number[]) => {
+  const placeholders = ids.map((_, i) => `$${i + 1}`).join(",");
+
+  return db.any(
+    `DELETE FROM applications WHERE id IN (${placeholders}) RETURNING *`,
+    ids
+  );
+};
+
+
 
 export {
+  duplicateApplication,
+  deleteManyApplications,
   getAllApplications,
   getOneApplication,
   deleteApplication,
